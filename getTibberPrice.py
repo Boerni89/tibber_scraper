@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from bs4 import BeautifulSoup
 from requests import Session as rq_Session
 from requests import exceptions as rq_exceptions
 from datetime import datetime
@@ -30,17 +29,18 @@ try:
         "postalCode": postalCode
     }
     response = session.get(url, params=params, headers=headers)
-    soup = BeautifulSoup(response.text, 'html.parser')
 
     if (response.headers._store['content-type'][1] == 'application/json; charset=utf-8'):
         current_datetime = datetime.now(timezone(tz))
         
         response_json = json_loads(response.text)
-        # TODO: aktuelle Stunde auslesen
+        
         priceIncludingVat = response_json['energy']['todayHours'][current_datetime.hour]['priceIncludingVat']
         priceExcludingVat = response_json['energy']['todayHours'][current_datetime.hour]['priceExcludingVat']
-
-    status = 'OK'
+        status = 'OK'
+    else:
+        error = f'Fehler {hostname} gibt kein JSON zurück'
+    
 except rq_exceptions.ConnectTimeout:
     error = f'Fehler {hostname} nicht erreichbar'
 except rq_exceptions.ConnectionError:
