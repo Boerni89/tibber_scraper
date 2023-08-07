@@ -1,30 +1,30 @@
 command_line:
   - sensor:
-    unique_id: "Tibber Strompreis Scraper"
-    name: "Tibber Strompreis Scraper"
-    scan_interval: 120
-    command: 'cd /config/ && python3 getTibberPrice.py'
-    command_timeout: 40
-    value_template: '{{ value_json["Status"] }}'
-    json_attributes:
-      - Data
-      - Error
+      unique_id: "Tibber Strompreis Scraper"
+      name: "Tibber Strompreis Scraper"
+      scan_interval: 120
+      command: 'cd /config/ && python3 getTibberPrice.py'
+      command_timeout: 40
+      value_template: '{{ value_json["Status"] }}'
+      json_attributes:
+        - Data
+        - Error
 
 template:
   - sensor:
-  - unique_id: "Tibber Strompreis"
-    name: "Tibber Strompreis"
-    unit_of_measurement: 'EUR/kWh'
-    availability: '{{ states("sensor.tibber_strompreis_scraper") == "OK"}}'
-    state: '{{ state_attr("sensor.tibber_strompreis_scraper", "Data")["priceIncludingVat"] }}'
-    state_class: measurement
-    device_class: monetary
-    icon: mdi:currency-eur
-  - unique_id: "Tibber Strompreis ohne Steuer"
-    name: "Tibber Strompreis ohne Steuer"
-    unit_of_measurement: 'EUR/kWh'
-    availability: '{{ states("sensor.tibber_strompreis_scraper") == "OK"}}'
-    state: '{{ state_attr("sensor.tibber_strompreis_scraper", "Data")["priceExcludingVat"] }}'
-    state_class: measurement
-    device_class: monetary
-    icon: mdi:currency-eur
+    - unique_id: "Tibber Strompreis"
+      name: "Tibber Strompreis"
+      unit_of_measurement: 'EUR/kWh'
+      availability: '{{ states("sensor.tibber_strompreis_scraper") == "OK"}}'
+      state: '{{ state_attr("sensor.tibber_strompreis_scraper", "Data")["priceIncludingVat"] }}'
+      state_class: measurement
+      device_class: monetary
+      icon: mdi:currency-eur
+    - unique_id: "Tibber Strompreis ohne Steuer"
+      name: "Tibber Strompreis ohne Steuer"
+      unit_of_measurement: 'EUR/kWh'
+      availability: '{{ states("sensor.tibber_strompreis_scraper") == "OK"}}'
+      state: '{{ state_attr("sensor.tibber_strompreis_scraper", "Data")["priceExcludingVat"] }}'
+      state_class: measurement
+      device_class: monetary
+      icon: mdi:currency-eur
